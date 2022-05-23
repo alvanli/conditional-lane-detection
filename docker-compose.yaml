@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  alvin-condlanenet:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: "ch35li/condlanenet:debug"
+    ports:
+      - "8889:8889"
+      - "8888:8888"
+    tty: true 
+    volumes:
+      - /home/ch35li/alvin/perp_stuff/conditional-lane-detection:/home/

@@ -1,6 +1,6 @@
 import argparse
 import io
-
+import sys
 import mmcv
 import onnx
 import torch
@@ -56,13 +56,14 @@ def export_onnx_model(model, inputs, passes):
     return onnx_model
 
 
-def parse_args():
+
+def main():
     parser = argparse.ArgumentParser(
         description='MMDet pytorch model conversion to ONNX')
-    parser.add_argument('config', help='test config file path')
-    parser.add_argument('checkpoint', help='checkpoint file')
+    parser.add_argument('--config', type=str, help='test config file path')
+    parser.add_argument('--checkpoint', type=str, help='checkpoint file')
     parser.add_argument(
-        '--out', type=str, required=True, help='output ONNX filename')
+        '--out', type=str, help='output ONNX filename')
     parser.add_argument(
         '--shape',
         type=int,
@@ -71,12 +72,11 @@ def parse_args():
         help='input image size')
     parser.add_argument(
         '--passes', type=str, nargs='+', help='ONNX optimization passes')
-    args = parser.parse_args()
-    return args
-
-
-def main():
-    args = parse_args()
+    args = parser.parse_args(sys.argv[1:])
+    
+    args.config = "configs/condlanenet/tusimple/tusimple_medium_test.py"
+    args.out = "./condlanenet.onnx"
+    args.checkpoint = "/home/tusimple_medium.pth"
 
     if not args.out.endswith('.onnx'):
         raise ValueError('The output file must be a onnx file.')
